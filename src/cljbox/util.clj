@@ -1,9 +1,8 @@
-(ns cljbox
+(ns cljbox.util
   (:require
    [clojure.data.csv :as csv]
    [clj-http.client :as client]
-   [clojure.java.io :as io]
-   [clojure.string :as str]))
+   [clojure.java.io :as io]))
 
 (defn add
   "Adds two numbers and returns the result."
@@ -17,11 +16,6 @@
   (with-open [reader (io/reader path)]
     (doall
      (csv/read-csv reader))))
-
-(defn str-split
-  "str/split for usage with the ->> (thread-last) macro."
-  [re s]
-  (str/split s re))
 
 (defn get-response-body
   "Makes a GET request to url and returns the response body."

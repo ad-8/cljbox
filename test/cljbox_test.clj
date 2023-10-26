@@ -1,6 +1,6 @@
 (ns cljbox-test
   (:require [clojure.test :refer :all]
-            [cljbox :refer :all]))
+            [cljbox.util :refer :all]))
 
 (deftest addition
   (is (= 3 (add 1 2)))
