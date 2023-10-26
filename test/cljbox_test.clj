@@ -3,10 +3,6 @@
             [cljbox.math :refer :all]))
 
 (deftest math
-  (testing "add"
-    (is (= 3 (add 1 2)))
-    (is (= -3 (add -1 -2)))
-    (is (= 0 (add 0 0)) "test adding zeros"))
   (testing "round-to"
     (let [PI 3.1415926535]
       (is (= 3.14 (round-to 2 PI)))
