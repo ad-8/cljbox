@@ -1,8 +1,9 @@
-(ns cljbox-test
+(ns cljbox
   (:require [clojure.test :refer :all]
-            [cljbox.math :refer :all]))
+            [cljbox.math :refer :all]
+            [cljbox.str]))
 
-(deftest math
+(deftest math-test
   (testing "round-to"
     (let [PI 3.1415926535]
       (is (= 3.14 (round-to 2 PI)))
@@ -21,5 +22,9 @@
     (is (= (Math/sqrt 32/7) (standard-deviation [2 4 4 4 5 5 7 9])) "wikipedia example")
     (is (thrown? ArithmeticException (standard-deviation [123])) "divide by zero")
     (is (= 0.0 (standard-deviation [1 1])))))
+
+(deftest str-test
+  (testing "split"
+    (is (= ["foo" "bar" "baz"] (->> "foo/bar/baz" (cljbox.str/split #"/"))))))
 
 (run-tests)
