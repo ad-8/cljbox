@@ -1,7 +1,7 @@
 (ns cljbox
   (:require [clojure.test :refer :all]
             [cljbox.math :refer :all]
-            [cljbox.str]))
+            [cljbox.str :as b.str]))
 
 (deftest math-test
   (testing "round-to"
@@ -25,6 +25,10 @@
 
 (deftest str-test
   (testing "split"
-    (is (= ["foo" "bar" "baz"] (->> "foo/bar/baz" (cljbox.str/split #"/"))))))
+    (is (= ["foo" "bar" "baz"] (->> "foo/bar/baz" (b.str/split #"/")))))
+  (testing "remove-ext"
+    (is (= "foo" (b.str/remove-ext "foo.txt")))
+    (is (= "foo.txt" (b.str/remove-ext "foo.txt.bak")) "just how remove-ext works")
+    (is (= "bar" (b.str/remove-ext "bar")))))
 
 (run-tests)
