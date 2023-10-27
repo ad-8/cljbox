@@ -11,11 +11,11 @@
         count (count coll)]
     (if (pos? count)
       (/ sum count)
-      0)))
+      nil)))
 
 (defn median [coll]
   (if (= 0 (count coll))
-    0
+    nil
     (let [sorted (sort coll)
           cnt (count sorted)
           halfway (quot cnt 2)]
@@ -27,11 +27,13 @@
           (mean [bottom-val top-val]))))))
 
 (defn standard-deviation [coll]
-  (let [avg (mean coll)
-        squares (for [x coll]
-                  (let [x-avg (- x avg)]
-                    (* x-avg x-avg)))
-        total (count coll)]
-    (-> (/ (apply + squares)
-           (- total 1))
-        (Math/sqrt))))
+  (if (< (count coll) 2)
+    nil
+    (let [avg (mean coll)
+          squares (for [x coll]
+                    (let [x-avg (- x avg)]
+                      (* x-avg x-avg)))
+          total (count coll)]
+      (-> (/ (apply + squares)
+             (- total 1))
+          (Math/sqrt)))))
