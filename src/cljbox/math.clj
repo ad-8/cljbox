@@ -1,19 +1,23 @@
 (ns cljbox.math)
 
 (defn round-to
-  "Round a double to the given precision (number of significant digits)"
+  "Rounds a float or double to the given precision (number of significant digits)."
   [precision d]
   (let [factor (Math/pow 10 precision)]
     (/ (Math/round (* d factor)) factor)))
 
-(defn mean [coll]
+(defn mean
+  "Returns the mean (average) of the numbers in coll."
+  [coll]
   (let [sum (apply + coll)
         count (count coll)]
     (if (pos? count)
       (/ sum count)
       nil)))
 
-(defn median [coll]
+(defn median
+  "Returns the median of the numbers in coll."
+  [coll]
   (if (= 0 (count coll))
     nil
     (let [sorted (sort coll)
@@ -26,7 +30,9 @@
               top-val (nth sorted halfway)]
           (mean [bottom-val top-val]))))))
 
-(defn standard-deviation [coll]
+(defn standard-deviation
+  "Returns the standard deviation of the numbers in coll."
+  [coll]
   (if (< (count coll) 2)
     nil
     (let [avg (mean coll)

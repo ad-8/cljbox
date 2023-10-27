@@ -6,7 +6,10 @@
   [re s]
   (str/split s re))
 
-(defn remove-ext [filename]
+(defn remove-ext
+  "Removes the extension from a filename. Everything after the last dot in filename,
+  including the dot itself, is considered the extension."
+  [filename]
   (let [index-last-dot (str/last-index-of filename ".")]
     (if (nil? index-last-dot)
       filename
