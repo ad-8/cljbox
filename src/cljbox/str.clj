@@ -3,8 +3,8 @@
 
 (defn split
   "str/split for use with the ->> (thread-last) macro."
-  [re s]
-  (str/split s re))
+  ([re s]       (str/split s re))
+  ([re limit s] (str/split s re limit)))
 
 (defn remove-ext
   "Removes the extension from a filename. Everything after the last dot in filename,

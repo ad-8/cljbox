@@ -29,7 +29,8 @@
 
 (deftest str-test
   (testing "split"
-    (is (= ["foo" "bar" "baz"] (->> "foo/bar/baz" (b.str/split #"/")))))
+    (is (= ["foo" "bar" "baz"] (->> "foo/bar/baz" (b.str/split #"/"))))
+    (is (= ["foo" "bar/baz"] (->> "foo/bar/baz" (b.str/split #"/" 2)))))
   (testing "remove-ext"
     (is (= "foo" (b.str/remove-ext "foo.txt")))
     (is (= "foo.txt" (b.str/remove-ext "foo.txt.bak")) "just how remove-ext works")
