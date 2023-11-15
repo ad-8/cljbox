@@ -1,7 +1,8 @@
 (ns cljbox
   (:require [clojure.test :refer :all]
             [cljbox.math :refer :all]
-            [cljbox.str :as b.str]))
+            [cljbox.str :as b.str]
+            [cljbox.coll :as coll]))
 
 (deftest math-test
   (testing "round-to"
@@ -36,5 +37,14 @@
     (is (= "foo.txt" (b.str/remove-ext "foo.txt.bak")) "just how remove-ext works")
     (is (= "bar" (b.str/remove-ext "bar")))
     (is (= "" (b.str/remove-ext "")))))
+
+(deftest coll-test
+  (testing "seq-contains?"
+    (is (= false (coll/coll-contains? [1 2 3] 0)))
+    (is (= true (coll/coll-contains? [1 2 3] 1)))
+    (is (= false (coll/coll-contains? '(:a \b "c") \x)))
+    (is (= true (coll/coll-contains? '(:a \b "c") \b)))
+    (is (= false (coll/coll-contains? [] 1337)))
+    (is (= true (coll/coll-contains? (seq "clojure") \j)))))
 
 (run-tests)
