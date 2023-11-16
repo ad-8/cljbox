@@ -2,7 +2,8 @@
   (:require [clojure.test :refer :all]
             [cljbox.math :refer :all]
             [cljbox.str :as b.str]
-            [cljbox.coll :as coll]))
+            [cljbox.coll :as coll]
+            [cljbox.datetime :as dt]))
 
 (deftest math-test
   (testing "round-to"
@@ -46,5 +47,21 @@
     (is (= true (coll/coll-contains? '(:a \b "c") \b)))
     (is (= false (coll/coll-contains? [] 1337)))
     (is (= true (coll/coll-contains? (seq "clojure") \j)))))
+
+(deftest test-to-hms
+  (testing "converting seconds to hours, minutes, and seconds"
+    (is (= [1 1 1] (dt/to-hms 3661)))
+    (is (= [0 1 0] (dt/to-hms 60)))
+    (is (= [2 30 0] (dt/to-hms 9000)))
+    (is (= [0 0 0] (dt/to-hms 0)))
+    (is (= [24 0 0] (dt/to-hms 86400)))
+    (is (= [0 0 1] (dt/to-hms 1)))
+    (is (= [0 0 59] (dt/to-hms 59)))
+    (is (= [0 1 0] (dt/to-hms 60)))
+    (is (= [0 59 59] (dt/to-hms 3599)))
+    (is (= [1 0 0] (dt/to-hms 3600)))
+    (is (= [1 2 3] (dt/to-hms 3723)))
+    (is (= [23 59 59] (dt/to-hms 86399)))
+    (is (thrown? IllegalArgumentException (dt/to-hms -1)))))
 
 (run-tests)
