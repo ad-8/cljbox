@@ -50,18 +50,51 @@
 
 (deftest test-to-hms
   (testing "converting seconds to hours, minutes, and seconds"
-    (is (= [1 1 1] (dt/to-hms 3661)))
-    (is (= [0 1 0] (dt/to-hms 60)))
-    (is (= [2 30 0] (dt/to-hms 9000)))
-    (is (= [0 0 0] (dt/to-hms 0)))
-    (is (= [24 0 0] (dt/to-hms 86400)))
-    (is (= [0 0 1] (dt/to-hms 1)))
-    (is (= [0 0 59] (dt/to-hms 59)))
-    (is (= [0 1 0] (dt/to-hms 60)))
-    (is (= [0 59 59] (dt/to-hms 3599)))
-    (is (= [1 0 0] (dt/to-hms 3600)))
-    (is (= [1 2 3] (dt/to-hms 3723)))
-    (is (= [23 59 59] (dt/to-hms 86399)))
-    (is (thrown? IllegalArgumentException (dt/to-hms -1)))))
+    (is (= [1 1 1] (dt/seconds->hms 3661)))
+    (is (= [0 1 0] (dt/seconds->hms 60)))
+    (is (= [2 30 0] (dt/seconds->hms 9000)))
+    (is (= [0 0 0] (dt/seconds->hms 0)))
+    (is (= [24 0 0] (dt/seconds->hms 86400)))
+    (is (= [0 0 1] (dt/seconds->hms 1)))
+    (is (= [0 0 59] (dt/seconds->hms 59)))
+    (is (= [0 1 0] (dt/seconds->hms 60)))
+    (is (= [0 59 59] (dt/seconds->hms 3599)))
+    (is (= [1 0 0] (dt/seconds->hms 3600)))
+    (is (= [1 2 3] (dt/seconds->hms 3723)))
+    (is (= [23 59 59] (dt/seconds->hms 86399)))
+    (is (thrown? IllegalArgumentException (dt/seconds->hms -1)))))
+
+
+(deftest test-my-subs
+  (is (= (b.str/safe-subs "foo" 0 0) ""))
+  (is (= (b.str/safe-subs "foo" 0 1) "f"))
+  (is (= (b.str/safe-subs "foo" 0 2) "fo"))
+  (is (= (b.str/safe-subs "foo" 0 3) "foo"))
+  (is (= (b.str/safe-subs "foo" 0 4) "foo"))
+  (is (= (b.str/safe-subs "foobar" 1 4) "oob"))
+  (is (= (b.str/safe-subs "baz" 0 10) "baz"))          ; Length less than 'end'
+  (is (= (b.str/safe-subs "qux" 0 3) "qux"))           ; Length equal to 'end'
+  (is (= (b.str/safe-subs "quux" 0 2) "qu"))           ; Length greater than 'end'
+  (is (= (b.str/safe-subs "hello" 1 5) "ello"))         ; Starting from index 1
+  (is (= (b.str/safe-subs "world" 0 0) ""))            ; Empty substring
+  (is (= (b.str/safe-subs "" 0 5) "")))                ; Empty string
+
+(deftest test-timestamp->datetime
+  (testing "todo"
+    (is (= "1970-01-01T01:00+01:00[Europe/Berlin]" (str (dt/timestamp->datetime 0))))
+    (is (= "2009-02-14T00:31:30+01:00[Europe/Berlin]" (str (dt/timestamp->datetime 1234567890))))))
+
+(deftest test-datetime
+  (testing "todo put all tests for functions from datetime.clj here"
+    (is (= (dt/seconds->dhms 0) {:days 0, :hours 0, :minutes 0, :seconds 0}))
+    (is (= (dt/seconds->dhms 1) {:days 0, :hours 0, :minutes 0, :seconds 1}))
+    (is (= (dt/seconds->dhms 60) {:days 0, :hours 0, :minutes 1, :seconds 0}))
+    (is (= (dt/seconds->dhms 3600) {:days 0, :hours 1, :minutes 0, :seconds 0}))
+    (is (= (dt/seconds->dhms 86400) {:days 1, :hours 0, :minutes 0, :seconds 0}))
+    (is (thrown? IllegalArgumentException (dt/seconds->dhms -1)))
+    ; TODO handle negative input
+    ;(is (= (dt/seconds->dhms -3665) {:days 0, :hours -1, :minutes -1, :seconds -5}))
+    (is (= (dt/seconds->dhms 123456789) {:days 1428 :hours 21 :minutes 33 :seconds 9}))))
 
 (run-tests)
+

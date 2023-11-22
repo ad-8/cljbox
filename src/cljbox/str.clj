@@ -14,3 +14,13 @@
     (if (nil? index-last-dot)
       filename
       (subs filename 0 index-last-dot))))
+
+(defn safe-subs
+  "Returns the substring of s beginning at start inclusive, and ending at end, exclusive.
+   This function is safe to use without checking the length of the input string,
+   as it will not throw an StringIndexOutOfBoundsException if the end index is out of bounds,
+   but simply return the input string. For example (safe-subs \"foo\" 0 4) will return \"foo\"."
+  [s start end]
+  (if (>= (count s) end)
+    (subs s start end)
+    s))
