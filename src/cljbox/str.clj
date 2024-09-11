@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]))
 
 (defn split
-  "str/split for use with the ->> (thread-last) macro."
+  "clojure.string/split for use with the ->> (thread-last) macro."
   ([re s]       (str/split s re))
   ([re limit s] (str/split s re limit)))
 
@@ -24,3 +24,9 @@
   (if (>= (count s) end)
     (subs s start end)
     s))
+
+;; https://andersmurphy.com/2019/01/15/clojure-string-interpolation.html
+(defn replace-several [s & {:as replacements}]
+  (reduce (fn [s [match replacement]]
+            (clojure.string/replace s match replacement))
+          s replacements))

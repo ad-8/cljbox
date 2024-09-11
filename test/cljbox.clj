@@ -37,16 +37,51 @@
     (is (= "foo" (b.str/remove-ext "foo.txt")))
     (is (= "foo.txt" (b.str/remove-ext "foo.txt.bak")) "just how remove-ext works")
     (is (= "bar" (b.str/remove-ext "bar")))
-    (is (= "" (b.str/remove-ext "")))))
+    (is (= "" (b.str/remove-ext ""))))
+  (testing "replace-several"
+    (is (= "https://www.shop.com/bob/items/A567/prices/EUR"
+           (b.str/replace-several "https://www.shop.com/$seller/items/$item-code/prices/$currency"
+                 "$seller" "bob"
+                 "$item-code" "A567"
+                 "$currency" "EUR")))))
+
 
 (deftest coll-test
-  (testing "seq-contains?"
+
+  (testing "coll-contains?"
     (is (= false (coll/coll-contains? [1 2 3] 0)))
     (is (= true (coll/coll-contains? [1 2 3] 1)))
     (is (= false (coll/coll-contains? '(:a \b "c") \x)))
     (is (= true (coll/coll-contains? '(:a \b "c") \b)))
     (is (= false (coll/coll-contains? [] 1337)))
-    (is (= true (coll/coll-contains? (seq "clojure") \j)))))
+    (is (= true (coll/coll-contains? (seq "clojure") \j))))
+
+  (testing "contains?"
+    (are
+     [expected coll val]
+     (= expected (coll/seq-contains? coll val))
+      false [1 2 3] 0
+      true  [1 2 3] 1
+      false '(:a \b "c") \x
+      true  '(:a \b "c") \b
+      false [] 1337
+      true  (seq "clojure") \j
+      true  ['()] '()
+      false [] '()
+      true  #{1 2 3} 2
+      false  #{1 2 3} 4)))
+
+
+; https://michaelwhatcott.com/table-driven-tests-in-clojure/
+(deftest test-map-next-el
+  (are
+   [input expected]
+   (= expected (coll/map-next-el input))
+    [1 2 3]   {1 2, 2 3, 3 1}
+    ["a" "b"] {"a" "b", "b" "a"}
+    [:foo]    {:foo :foo}
+    []        {}))
+
 
 (deftest test-to-hms
   (testing "converting seconds to hours, minutes, and seconds"
@@ -75,7 +110,7 @@
   (is (= (b.str/safe-subs "baz" 0 10) "baz"))          ; Length less than 'end'
   (is (= (b.str/safe-subs "qux" 0 3) "qux"))           ; Length equal to 'end'
   (is (= (b.str/safe-subs "quux" 0 2) "qu"))           ; Length greater than 'end'
-  (is (= (b.str/safe-subs "hello" 1 5) "ello"))         ; Starting from index 1
+  (is (= (b.str/safe-subs "hello" 1 5) "ello"))        ; Starting from index 1
   (is (= (b.str/safe-subs "world" 0 0) ""))            ; Empty substring
   (is (= (b.str/safe-subs "" 0 5) "")))                ; Empty string
 
@@ -96,5 +131,5 @@
     ;(is (= (dt/seconds->dhms -3665) {:days 0, :hours -1, :minutes -1, :seconds -5}))
     (is (= (dt/seconds->dhms 123456789) {:days 1428 :hours 21 :minutes 33 :seconds 9}))))
 
-(run-tests)
 
+(run-tests)
